@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asistente IPN</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: #eef4ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  .widget {
+    width: 360px;
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba(0,60,150,.18);
+    background: #fff;
+    animation: popIn .45s cubic-bezier(.34,1.56,.64,1);
+  }
+
+  @keyframes popIn {
+    from { transform: scale(.85) translateY(20px); opacity: 0; }
+    to   { transform: scale(1) translateY(0); opacity: 1; }
+  }
+
+  .header {
+    background: linear-gradient(135deg, #0057B8 0%, #003E8A 100%);
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -30px; right: -30px;
+    width: 110px; height: 110px;
+    background: rgba(255,255,255,.07);
+    border-radius: 50%;
+  }
+
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; right: 30px;
+    width: 75px; height: 75px;
+    background: rgba(255,255,255,.05);
+    border-radius: 50%;
+  }
+
+  .avatar {
+    width: 48px; height: 48px;
+    background: rgba(255,255,255,.2);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 25px;
+    flex-shrink: 0;
+    border: 2px solid rgba(255,255,255,.3);
+    position: relative; z-index: 1;
+  }
+
+  .header-info { position: relative; z-index: 1; }
+
+  .header-info h3 {
+    color: #fff;
+    font-size: 15.5px;
+    font-weight: 800;
+  }
+
+  .header-info .sub {
+    color: rgba(255,255,255,.75);
+    font-size: 11.5px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 3px;
+  }
+
+  .dot {
+    width: 7px; height: 7px;
+    background: #4ADE80;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%,100% { opacity: 1; }
+    50% { opacity: .35; }
+  }
+
+  .chat-body {
+    padding: 22px 16px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .bubble {
+    display: flex;
+    gap: 9px;
+    align-items: flex-end;
+    animation: fadeUp .3s ease both;
+  }
+
+  .bubble:nth-child(2) { animation-delay: .12s; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .bubble-avatar {
+    width: 28px; height: 28px;
+    background: #EEF4FF;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-bottom: 2px;
+  }
+
+  .bubble-text {
+    background: #EEF4FF;
+    border-radius: 16px 16px 16px 4px;
+    padding: 11px 14px;
+    font-size: 13.5px;
+    color: #1e2d4a;
+    line-height: 1.55;
+    max-width: 272px;
+    font-weight: 600;
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    animation: fadeUp .35s .22s ease both;
+  }
+
+  .btn-option {
+    border: none;
+    border-radius: 14px;
+    padding: 13px 15px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    transition: transform .15s, box-shadow .15s, filter .15s;
+    width: 100%;
+  }
+
+  .btn-option:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(0,0,0,.13);
+    filter: brightness(1.05);
+  }
+
+  .btn-option:active { transform: translateY(0); }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #0057B8, #003E8A);
+    color: #fff;
+    box-shadow: 0 5px 16px rgba(0,87,184,.3);
+  }
+
+  .btn-secondary {
+    background: #F5F9FF;
+    color: #1e3a6e;
+    border: 1.5px solid #C8D9F8;
+  }
+
+  .btn-icon { font-size: 22px; flex-shrink: 0; }
+
+  .btn-content { display: flex; flex-direction: column; }
+
+  .btn-content small {
+    font-size: 11px;
+    font-weight: 600;
+    opacity: .7;
+    margin-top: 2px;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 10px 16px 16px;
+    font-size: 11px;
+    color: #94a3b8;
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<div class="widget">
+
+  <div class="header">
+    <div class="avatar">🏥</div>
+    <div class="header-info">
+      <h3>Asistente IPN</h3>
+      <div class="sub"><span class="dot"></span> En línea ahora</div>
+    </div>
+  </div>
+
+  <div class="chat-body">
+
+    <div class="bubble">
+      <div class="bubble-avatar">🏥</div>
+      <div class="bubble-text">
+        ¡Bienvenido/a! 👋 ¿Cómo podemos ayudarte hoy?
+      </div>
+    </div>
+
+    <div class="bubble">
+      <div class="bubble-avatar">🏥</div>
+      <div class="bubble-text">
+        Elegí una opción y te atendemos enseguida:
+      </div>
+    </div>
+
+    <div class="options">
+
+      <a class="btn-option btn-primary"
+         href="https://coberturasipn-cirugia.github.io/Reserva-de-turno-mas-Info/"
+         target="_blank">
+        <span class="btn-icon">📋</span>
+        <div class="btn-content">
+          Ver información y reservar turno
+          <small>Coberturas, cirugías y más →</small>
+        </div>
+      </a>
+
+      <a class="btn-option btn-secondary"
+         href="https://wa.me/595984433533?text=Hola%2C%20necesito%20hablar%20con%20una%20operadora"
+         target="_blank">
+        <span class="btn-icon">💬</span>
+        <div class="btn-content">
+          Hablar con una operadora
+          <small>Te atendemos por WhatsApp</small>
+        </div>
+      </a>
+
+    </div>
+
+  </div>
+
+  <div class="footer">IPN · Atención al Paciente</div>
+
+</div>
+
+</body>
+</html>
